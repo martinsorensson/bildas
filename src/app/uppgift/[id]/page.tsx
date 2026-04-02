@@ -71,13 +71,20 @@ export default function ElevUppladdningPage() {
       })
     }
 
-    const filnamn = `${params.id}/${user.id}/${Date.now()}-${fil.name}`
-    const { error: uploadFel } = await supabase.storage
+    const { data: { session } } = await supabase.auth.getSession()
+    console.log('[upload] Session:', session ? `giltig, token börjar med ${session.access_token.slice(0, 20)}...` : 'SAKNAS')
+
+    const ext = fil.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+    const filnamn = `${params.id}/${user.id}/${Date.now()}.${ext}`
+    console.log('[upload] Försöker ladda upp:', { filnamn, bucket: 'bilder', userId: user.id, filstorlek: fil.size, contentType: fil.type })
+    const { data: uploadData, error: uploadFel } = await supabase.storage
       .from('bilder')
-      .upload(filnamn, fil, { upsert: true })
+      .upload(filnamn, fil, { upsert: true, contentType: fil.type })
+
+    console.log('[upload] Resultat:', { uploadData, uploadFel: uploadFel ? { message: uploadFel.message, name: uploadFel.name, cause: (uploadFel as any).cause } : null })
 
     if (uploadFel) {
-      setFel('Kunde inte ladda upp bilden. Kontrollera att storage-bucketen finns.')
+      setFel(`Uppladdning misslyckades: ${uploadFel.message}`)
       setLaddarUpp(false)
       return
     }

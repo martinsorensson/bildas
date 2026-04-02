@@ -53,6 +53,14 @@ export default function InlamningPage() {
       <nav className="bg-white border-b px-6 py-4 flex items-center gap-4">
         <button onClick={() => router.back()} className="text-gray-500 hover:text-black">← Tillbaka</button>
         <h1 className="text-xl font-bold">{uppgift.titel}</h1>
+        {process.env.NODE_ENV === 'development' && (
+          <button
+            onClick={() => window.open(`/uppgift/${params.id}`, '_blank')}
+            className="ml-auto text-xs border border-dashed border-gray-300 text-gray-400 px-3 py-1 rounded-lg hover:border-gray-400 hover:text-gray-600"
+          >
+            Testa elevvy ↗
+          </button>
+        )}
       </nav>
       <main className="max-w-5xl mx-auto p-6 space-y-6">
         <div className="bg-white rounded-xl border p-6">

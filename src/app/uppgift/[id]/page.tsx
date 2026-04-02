@@ -58,17 +58,24 @@ export default function ElevUppladdningPage() {
     // Säkerställ att eleven har en profil
     const { data: profil } = await supabase
       .from('profiles')
-      .select('id')
+      .select('id, namn')
       .eq('id', user.id)
       .maybeSingle()
+
+    const elevNamn = user.user_metadata?.name
+      ?? user.user_metadata?.full_name
+      ?? user.email?.split('@')[0]
+      ?? 'Elev'
 
     if (!profil) {
       await supabase.from('profiles').insert({
         id: user.id,
         role: 'elev',
-        namn: user.user_metadata?.full_name ?? user.email?.split('@')[0] ?? 'Elev',
+        namn: elevNamn,
         email: user.email,
       })
+    } else if (!profil.namn) {
+      await supabase.from('profiles').update({ namn: elevNamn }).eq('id', user.id)
     }
 
     const { data: { session } } = await supabase.auth.getSession()

@@ -31,7 +31,7 @@ export default function InlamningPage() {
 
       const { data: inlamningarData } = await supabase
         .from('inlamningar')
-        .select('id, bild_url, status, skapad_at, profiles(namn, email)')
+        .select('id, bild_url, status, skapad_at, profiles!elev_id(namn, email)')
         .eq('uppgift_id', params.id)
         .order('skapad_at', { ascending: false })
       if (inlamningarData) setInlamningar(inlamningarData as Inlamning[])

@@ -1,20 +1,29 @@
 'use client'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
 export default function LoginPage() {
   const supabase = createClient()
+  const searchParams = useSearchParams()
+  const next = searchParams.get('next') ?? '/dashboard'
+
+  const callbackUrl = () => {
+    const url = new URL(`${window.location.origin}/auth/callback`)
+    url.searchParams.set('next', next)
+    return url.toString()
+  }
 
   const loginWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` }
+      options: { redirectTo: callbackUrl() }
     })
   }
 
   const loginWithMicrosoft = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'azure',
-      options: { redirectTo: `${window.location.origin}/auth/callback` }
+      options: { redirectTo: callbackUrl() }
     })
   }
 

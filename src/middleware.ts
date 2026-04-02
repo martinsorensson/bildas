@@ -22,13 +22,18 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  const skyddadeRoutes = ['/dashboard', '/uppgift']
+  const skyddad = skyddadeRoutes.some(r => request.nextUrl.pathname.startsWith(r))
+
+  if (!user && skyddad) {
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('next', request.nextUrl.pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
   return supabaseResponse
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*']
+  matcher: ['/dashboard/:path*', '/uppgift/:path*']
 }

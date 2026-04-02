@@ -48,7 +48,7 @@ export default function DashboardPage() {
                     ))}
                   </div>
                 </div>
-                <button className="text-sm text-gray-500 hover:text-black border px-3 py-1.5 rounded-lg">
+                <button onClick={() => router.push(`/dashboard/inlamning/${u.id}`)} className="text-sm text-gray-500 hover:text-black border px-3 py-1.5 rounded-lg">
                   Visa →
                 </button>
               </div>

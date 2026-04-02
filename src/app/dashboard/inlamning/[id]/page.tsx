@@ -8,7 +8,7 @@ type Inlamning = {
   bild_url: string
   status: string
   skapad_at: string
-  profiles: { namn: string; email: string } | null
+  profiles: { namn: string; email: string }[] | null
 }
 
 export default function InlamningPage() {
@@ -104,8 +104,8 @@ export default function InlamningPage() {
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-4">
-                    <p className="font-medium text-sm">{inl.profiles?.namn ?? 'Okänd elev'}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{inl.profiles?.email}</p>
+                    <p className="font-medium text-sm">{inl.profiles?.[0]?.namn ?? 'Okänd elev'}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{inl.profiles?.[0]?.email}</p>
                     <div className="flex items-center justify-between mt-3">
                       <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full capitalize">
                         {inl.status.replace('_', ' ')}

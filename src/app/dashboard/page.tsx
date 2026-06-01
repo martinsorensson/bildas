@@ -42,6 +42,16 @@ export default async function DashboardPage({
     return <LararDashboard uppgifter={uppgifter ?? []} kurser={kurser ?? []} />
   }
 
+  type KursRad = {
+    joined_at: string
+    kurser: {
+      id: string
+      namn: string
+      kod: string
+      uppgifter: { id: string; titel: string; beskrivning: string | null; bedomningsparametrar: string[] | null }[]
+    } | null
+  }
+
   // Elevvy
   const { data: kursElever } = await supabase
     .from('kurs_elever')
@@ -53,7 +63,7 @@ export default async function DashboardPage({
       )
     `)
     .eq('elev_id', user.id)
-    .order('joined_at', { ascending: true })
+    .order('joined_at', { ascending: true }) as { data: KursRad[] | null }
 
   if (!kursElever || kursElever.length === 0) redirect('/join')
 

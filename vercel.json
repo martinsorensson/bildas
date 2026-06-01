@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "src/app/dashboard/elev/[elev_id]/actions.ts": { "maxDuration": 60 },
+    "src/app/dashboard/uppgift/[uppgift_id]/actions.ts": { "maxDuration": 60 },
+    "src/app/dashboard/kurs/[kurs_id]/actions.ts": { "maxDuration": 60 }
+  }
+}

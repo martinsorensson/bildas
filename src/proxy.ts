@@ -11,8 +11,11 @@ export async function proxy(request: NextRequest) {
       cookies: {
         getAll() { return request.cookies.getAll() },
         setAll(cookiesToSet) {
+          // Sätt uppdaterade cookies på request-objektet så att Server Components
+          // ser dem via cookies() från next/headers (viktig för token-refresh).
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({ request })
+          // Sätt även på response så att webbläsaren får de nya cookies.
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options))
         },
@@ -22,7 +25,7 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const skyddadeRoutes = ['/dashboard', '/uppgift']
+  const skyddadeRoutes = ['/dashboard', '/uppgift', '/admin', '/join']
   const skyddad = skyddadeRoutes.some(r => request.nextUrl.pathname.startsWith(r))
 
   if (!user && skyddad) {
@@ -31,9 +34,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 
+  // VIKTIGT: returnera alltid supabaseResponse (inte ett nytt NextResponse.next())
+  // så att de uppdaterade cookie-headrarna följer med.
   return supabaseResponse
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/uppgift/:path*']
+  matcher: ['/dashboard/:path*', '/uppgift/:path*', '/admin/:path*', '/admin', '/join']
 }

@@ -70,7 +70,7 @@ export default function ElevUppladdningPage() {
     if (!profil) {
       await supabase.from('profiles').insert({
         id: user.id,
-        role: 'elev',
+        role: 'pending',
         namn: elevNamn,
         email: user.email,
       })
@@ -132,6 +132,12 @@ export default function ElevUppladdningPage() {
           </div>
           <h2 className="text-xl font-bold mb-2">Inlämnat!</h2>
           <p className="text-gray-500">Din bild har skickats till läraren.</p>
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="mt-6 w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition"
+          >
+            Gå till min portfolio
+          </button>
         </div>
       </div>
     )

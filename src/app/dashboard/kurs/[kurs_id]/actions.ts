@@ -97,7 +97,7 @@ export async function genereraElevFeedback(
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
   const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-5',
     max_tokens: 512,
     system: `Du är en uppmuntrande bildlärare som ger kort, konkret feedback direkt till eleven.
 Skriv på svenska. Använd "du" och tilltala eleven direkt.

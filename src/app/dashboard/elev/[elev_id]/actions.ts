@@ -120,7 +120,7 @@ Nedan följer elevens bilder i kronologisk ordning:`,
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
   const stream = client.messages.stream({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-5',
     max_tokens: 64000,
     system: systemPrompt,
     messages: [{ role: 'user', content: userContent }],
